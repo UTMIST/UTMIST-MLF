@@ -56,9 +56,9 @@ def load_cifar10_dataset(n_train=5000, n_test=1000, seed=0, grayscale=True):
     # Load CIFAR-10 from HuggingFace
     print("Loading CIFAR-10 dataset from HuggingFace...")
     train_dataset = load_dataset(
-        "uoft-cs/cifar10", split="train", trust_remote_code=True)
+        "uoft-cs/cifar10", split="train")
     test_dataset = load_dataset(
-        "uoft-cs/cifar10", split="test", trust_remote_code=True)
+        "uoft-cs/cifar10", split="test")
 
     # Set random seed
     rng = random.Random(seed)
