@@ -80,8 +80,9 @@ def load_cifar10_dataset(n_train=5000, n_test=1000, seed=0, grayscale=True):
 
             if grayscale:
                 # Convert RGB to grayscale using standard luminosity formula
-                img = 0.299 * img[:, :, 0] + 0.587 * \
-                    img[:, :, 1] + 0.114 * img[:, :, 2]
+                img = (0.299 * img[:, :, 0] +
+                       0.587 * img[:, :, 1] +
+                       0.114 * img[:, :, 2])
 
             # Normalize to [0, 1]
             img = img.astype(np.float32) / 255.0
