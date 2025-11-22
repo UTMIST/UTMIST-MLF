@@ -30,7 +30,7 @@ def accuracy(y_true, y_pred):
 # --------------------
 
 
-def load_cifar10_dataset(n_train=5000, n_test=1000, seed=0, grayscale=True):
+def load_cifar100_dataset(n_train=5000, n_test=1000, seed=0, grayscale=True):
     """
     Load CIFAR-10 dataset from HuggingFace and prepare it for the exercises.
 
@@ -54,11 +54,11 @@ def load_cifar10_dataset(n_train=5000, n_test=1000, seed=0, grayscale=True):
             "Please install the datasets library: pip install datasets")
 
     # Load CIFAR-10 from HuggingFace
-    print("Loading CIFAR-10 dataset from HuggingFace...")
+    print("Loading CIFAR-100 dataset from HuggingFace...")
     train_dataset = load_dataset(
-        "uoft-cs/cifar10", split="train")
+        "cifar100", split="train")
     test_dataset = load_dataset(
-        "uoft-cs/cifar10", split="test")
+        "cifar100", split="test")
 
     # Set random seed
     rng = random.Random(seed)
@@ -88,7 +88,7 @@ def load_cifar10_dataset(n_train=5000, n_test=1000, seed=0, grayscale=True):
             img = img.astype(np.float32) / 255.0
 
             images.append(img)
-            labels.append(example['label'])
+            labels.append(example['fine_label'])
 
         return np.array(images, dtype=np.float32), np.array(labels, dtype=np.int64)
 
@@ -98,8 +98,10 @@ def load_cifar10_dataset(n_train=5000, n_test=1000, seed=0, grayscale=True):
         test_dataset, test_indices, grayscale)
 
     # Class names for CIFAR-10
-    class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer',
-                   'dog', 'frog', 'horse', 'ship', 'truck']
+    try:
+        class_names = train_dataset.features['fine_label'].names
+    except:
+        class_names = [str(i) for i in range(100)]
 
     print(
         f"Loaded {len(train_images)} training images and {len(test_images)} test images")
@@ -156,7 +158,7 @@ def test_exercise_7_pca(student_pca_func):
     float in [0,1] without raising an exception.
     """
     try:
-        Xtr, ytr, Xte, yte, _ = load_cifar10_dataset(
+        Xtr, ytr, Xte, yte, _ = load_cifar100_dataset(
             n_train=100, n_test=30, seed=42, grayscale=True)
     except Exception as e:
         return {"passed": False, "message": f"dataset loading error: {e}"}
@@ -180,8 +182,8 @@ def _test_cnn_student_func(student_fn):
     and ensures the return value is a float in [0,1].
     """
     try:
-        Xtr, ytr, Xte, yte, _ = load_cifar10_dataset(
-            n_train=50, n_test=20, seed=99, grayscale=True)
+        Xtr, ytr, Xte, yte, _ = load_cifar100_dataset(
+            n_train=1000, n_test=150, seed=99, grayscale=False)
     except Exception as e:
         return {"passed": False, "message": f"dataset loading error: {e}"}
 
